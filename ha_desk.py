@@ -62,6 +62,7 @@ powerpin = args.powerpin
 uppin = args.uppin
 downpin = args.downpin
 sleeptimeorg = args.sleep
+sleeptimeforstop = .25
 
 #ToDo, test the response code (i.e. 401)
 def get_desk_state(cover):
@@ -109,20 +110,18 @@ try:
       if 'state' in coverData and 'state' in booleanData:
         if booleanData['state'] == 'on':
           if coverData['state'] == 'open':
-            logging.info('Desk stage is up')
+            logging.info('Desk state is up')
             state = 'up'
           elif coverData['state'] == 'closed':
-            logging.info('Desk stage is down')
+            logging.info('Desk state is down')
             state = 'down'
 
       if state is 'up':
-        sleeptime = .25
-        logging.info('Desk is going up')
+        sleeptime = sleeptimeforstop
         GPIO.output(uppin, True)
         GPIO.output(powerpin, True)
       elif state is 'down':
-        sleeptime = .25
-        logging.info('Desk is going down')
+        sleeptime = sleeptimeforstop
         GPIO.output(downpin, True)
         GPIO.output(powerpin, True)
       else:
