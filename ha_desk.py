@@ -101,6 +101,7 @@ GPIO.setup(powerpin, GPIO.OUT)
 GPIO.setup(uppin, GPIO.OUT)
 GPIO.setup(downpin, GPIO.OUT)
 
+previousState = 'off'
 try:
     while True:
       coverData = get_desk_state(args.deskcover)
@@ -110,11 +111,13 @@ try:
       if 'state' in coverData and 'state' in booleanData:
         if booleanData['state'] == 'on':
           if coverData['state'] == 'open':
-            logging.info('Desk state is up')
             state = 'up'
           elif coverData['state'] == 'closed':
-            logging.info('Desk state is down')
             state = 'down'
+
+      if state != previousState:
+        previousState = state
+        logging.info('Desk state switched, state is now %s',state)
 
       if state is 'up':
         sleeptime = sleeptimeforstop
